@@ -10,7 +10,7 @@ Codex works best when it does not have to rediscover your world in every convers
 4. A workspace index that identifies canonical projects and blocked duplicates.
 5. Short project instructions and runbooks near the code.
 6. A knowledge bootstrap that points to Notion, Obsidian, or Markdown.
-7. One pinned Workspace Manager thread that routes work and checks completion.
+7. An optional pinned Workspace Manager thread when several active projects make routing repetitive.
 
 This is an orchestration workspace, not a giant monorepo. The parent folder provides the map; each project keeps its own history, dependencies, and deployment lifecycle.
 
@@ -30,7 +30,17 @@ The index protects you from a common failure: multiple checkouts, old experiment
 
 ### 3. The Workspace Manager
 
-The manager is a pinned control thread. It owns intake, routing, task lifecycle, and acceptance. It does not need to write the project code itself.
+The manager is not a special model or product mode. It is simply one pinned Codex thread that knows your project map. You tell it the outcome; it routes the work to the right project thread and checks the result.
+
+Skip the manager when you have one or two projects and already know where each task belongs. Add one when you have three or more active projects, duplicate tasks become common, or choosing the correct project starts taking effort.
+
+Example request to a manager:
+
+> Update the checkout flow in Shop. Reuse the existing task if there is one, and verify the live result before calling it done.
+
+Prompt to create one:
+
+> Create a pinned Workspace Manager for this workspace. Read the root instructions and project index first. For each request, choose the right project, reuse an existing thread when possible, and verify the result before calling it done.
 
 For every request, it should:
 
@@ -46,7 +56,13 @@ Model selection can live in this central policy. The user should not need to cho
 
 ### 4. Execution
 
-Use separate threads and sub-agents for different jobs.
+Use separate threads and sub-agents for different jobs. A separate thread owns an outcome over time. A sub-agent is a temporary helper created inside the current thread for one narrow piece of work.
+
+You do not need to talk to sub-agents separately. Ask the main thread to spawn them, give each helper an independent lane, and combine their results.
+
+Example:
+
+> Use 3 sub-agents for this review: one to check the mobile layout, one to check accessibility, and one to review the copy. Keep them read-only, then combine their findings into one prioritized list.
 
 | Decision | Separate thread | Sub-agent |
 | --- | --- | --- |
@@ -57,6 +73,8 @@ Use separate threads and sub-agents for different jobs.
 | Main risk | Duplicating an existing task | Multiple agents editing the same files |
 
 Only parallelize work that is genuinely independent. Two or three narrow agents are usually more useful than a large swarm.
+
+Good uses include comparing design directions, researching independent options, reviewing separate modules, and running different checks. Skip sub-agents when the task is small, the steps depend on one another, or several agents would edit the same file.
 
 Parallelism reliably saves wall-clock time. It saves compute only when the scopes are small, non-duplicative, and assigned to the lightest capable worker. More agents can cost more.
 
@@ -76,7 +94,7 @@ Create one bootstrap file that explains where durable knowledge lives and how to
 
 ### Step 4: Create the manager
 
-Start one pinned thread using the manager template. Ask it to read the root instructions, validate the project index, and report readiness before delegating work.
+If routing is becoming repetitive, start one pinned thread using the manager template. Ask it to read the root instructions, validate the project index, and report readiness before delegating work. With only one or two projects, skip this step and work directly in project threads.
 
 ### Step 5: Run the first task
 

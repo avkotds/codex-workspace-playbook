@@ -1,9 +1,10 @@
 import { CopySetupPrompt } from "./CopySetupPrompt";
+import { CopyPrompt } from "./CopyPrompt";
 
 const architecture = [
   ["01", "Knowledge", "Notion, Obsidian, or Markdown holds durable context."],
   ["02", "Workspace index", "A small map tells Codex which project is canonical."],
-  ["03", "Manager", "One pinned thread routes work and checks completion."],
+  ["03", "Manager", "Optional once several projects make routing repetitive."],
   ["04", "Execution", "Threads own tasks; sub-agents parallelize bounded work."],
 ];
 
@@ -11,10 +12,14 @@ const setupSteps = [
   ["Create the workspace", "Use one parent folder. Keep each real project in its own Git repository."],
   ["Add the routing files", "Give the root and every project concise instructions, ownership, and done criteria."],
   ["Connect knowledge", "Point Codex to a small bootstrap page instead of dumping your entire notes system."],
-  ["Start the manager", "Pin one orchestration thread that delegates, verifies, and keeps the task list clean."],
+  ["Add a manager if needed", "With three or more active projects, pin one thread to route work and check results."],
   ["Use parallelism carefully", "Create separate threads for durable ownership and sub-agents for independent checks."],
   ["Verify the outcome", "Builds are evidence, not completion. Check the real page, endpoint, file, or runtime."],
 ];
+
+const managerPrompt = `Create a pinned Workspace Manager for this workspace. Read the root instructions and project index first. For each request, choose the right project, reuse an existing thread when possible, and verify the result before calling it done.`;
+
+const subAgentPrompt = `Use 3 sub-agents for this review: one to check the mobile layout, one to check accessibility, and one to review the copy. Keep them read-only, then combine their findings into one prioritized list.`;
 
 export default function Home() {
   return (
@@ -24,7 +29,7 @@ export default function Home() {
           <span className="brand-mark">CWP</span><span>Codex Workspace Playbook</span>
         </a>
         <nav aria-label="Primary navigation">
-          <a href="#architecture">System</a><a href="#setup">Setup</a><a href="#roles">Agents</a><a href="#starter-kit">Starter kit</a>
+          <a href="#architecture">System</a><a href="#setup">Setup</a><a href="#roles">Manager &amp; agents</a><a href="#starter-kit">Starter kit</a>
         </nav>
       </header>
 
@@ -32,7 +37,7 @@ export default function Home() {
         <div className="hero-copy">
           <p className="eyebrow">A field guide for beginners</p>
           <h1>Turn one folder into a working AI team.</h1>
-          <p className="lede">Connect your projects, notes, and instructions once. Then use one Workspace Manager to route work into focused threads and bounded sub-agents—without choosing a model every time.</p>
+          <p className="lede">Connect your projects, notes, and instructions once. Start with one project thread. Add a manager when your workspace grows, and use sub-agents when one task can split into independent parts.</p>
           <div className="hero-actions"><CopySetupPrompt /><a className="button secondary" href="/downloads/codex-workspace-starter.zip" download>Download starter kit</a></div>
           <p className="microcopy">No account, installer, or specific note-taking app required.</p>
         </div>
@@ -58,12 +63,33 @@ export default function Home() {
       </section>
 
       <section className="roles shell" id="roles" aria-labelledby="roles-title">
-        <div className="section-heading"><p className="eyebrow">Two kinds of parallel work</p><h2 id="roles-title">Threads own outcomes. Sub-agents shorten the path.</h2></div>
-        <div className="comparison" role="table" aria-label="Threads and sub-agents comparison">
-          <div className="comparison-row comparison-head" role="row"><span role="columnheader">Decision</span><span role="columnheader">Separate thread</span><span role="columnheader">Sub-agent</span></div>
-          {[["Best for", "A durable project outcome", "A bounded parallel check"], ["Context", "Independent task history", "Parent context and shared files"], ["Examples", "Build a feature; repair production", "Compare designs; scan tests; research variants"], ["Lifecycle", "Assign, inspect, accept, archive", "Spawn, collect results, integrate"], ["Main risk", "Duplicating an existing task", "Agents editing the same files"]].map((row) => <div className="comparison-row" role="row" key={row[0]}>{row.map((cell, index) => <span role="cell" key={cell} data-label={index === 1 ? "Thread" : index === 2 ? "Sub-agent" : undefined}>{cell}</span>)}</div>)}
+        <div className="section-heading"><p className="eyebrow">Use only what helps</p><h2 id="roles-title">Manager for routing. Sub-agents for parallel work.</h2><p>Neither is required to start. Add each one only when it removes work you are already repeating.</p></div>
+
+        <div className="decision-strip" aria-label="When to use workspace orchestration">
+          <article><span className="decision-count">1–2 projects</span><h3>Skip the manager</h3><p>Open the project thread and ask Codex directly. A routing layer would only add ceremony.</p></article>
+          <article className="decision-highlight"><span className="decision-count">3+ active projects</span><h3>Add a manager</h3><p>Use one front-door thread when choosing the right project or finding the current task starts taking effort.</p></article>
+          <article><span className="decision-count">Any workspace size</span><h3>Use sub-agents selectively</h3><p>Spawn them only when one task has two or more independent lanes that can run at the same time.</p></article>
         </div>
-        <p className="cost-note"><strong>About cost:</strong> parallelism reliably saves wall-clock time. It saves compute only when tasks are independent, tightly scoped, and assigned to the lightest capable worker.</p>
+
+        <div className="role-grid">
+          <article className="role-card manager-card">
+            <div className="role-card-heading"><p className="role-label">The manager</p><h3>A permanent front desk</h3></div>
+            <p className="role-definition">A manager is simply one pinned Codex thread that knows your project map. You tell it the outcome; it routes the work to the right project thread and checks the result.</p>
+            <div className="role-flow" aria-label="Manager workflow"><span>You</span><b aria-hidden="true">→</b><span>Manager</span><b aria-hidden="true">→</b><span>Project thread</span></div>
+            <div className="plain-steps"><div><strong>Talk to it like this</strong><p>“Update the checkout flow in Shop. Reuse the existing task if there is one, and verify the live result.”</p></div><div><strong>Best when</strong><p>You have several active projects, duplicate tasks, or keep explaining where work belongs.</p></div><div><strong>Skip it when</strong><p>You have one or two projects and already know which thread should own the work.</p></div></div>
+            <div className="prompt-box"><div className="prompt-topline"><span>Prompt to create one</span><CopyPrompt text={managerPrompt} /></div><pre>{managerPrompt}</pre></div>
+          </article>
+
+          <article className="role-card agent-card">
+            <div className="role-card-heading"><p className="role-label">Sub-agents</p><h3>Temporary extra hands</h3></div>
+            <p className="role-definition">A sub-agent is a short-lived helper created inside your current thread. You keep talking to the main thread; it gives each helper a narrow job, collects the results, and returns one answer.</p>
+            <div className="role-flow split-flow" aria-label="Sub-agent workflow"><span>You</span><b aria-hidden="true">→</b><span>Main thread</span><b aria-hidden="true">→</b><span>2–3 helpers</span><b aria-hidden="true">→</b><span>One result</span></div>
+            <div className="plain-steps"><div><strong>Trigger them in plain language</strong><p>Say how many helpers you want, give each one a separate lane, and say how their work should be combined.</p></div><div><strong>Best when</strong><p>Comparing designs, researching independent options, reviewing separate modules, or running different checks.</p></div><div><strong>Skip them when</strong><p>The task is small, steps depend on each other, or several agents would edit the same file.</p></div></div>
+            <div className="prompt-box"><div className="prompt-topline"><span>Prompt to use them</span><CopyPrompt text={subAgentPrompt} /></div><pre>{subAgentPrompt}</pre></div>
+          </article>
+        </div>
+
+        <p className="cost-note"><strong>Simple rule:</strong> sub-agents usually save time, not money. Keep their jobs independent and narrow so they do not repeat the same work.</p>
       </section>
 
       <section className="starter shell" id="starter-kit" aria-labelledby="starter-title">

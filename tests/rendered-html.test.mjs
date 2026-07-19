@@ -16,7 +16,11 @@ test("server-renders the finished playbook", async () => {
   const html = await response.text();
   assert.match(html, /<title>Codex Workspace Playbook<\/title>/i);
   assert.match(html, /Turn one folder into a working AI team/);
-  assert.match(html, /Threads own outcomes/);
+  assert.match(html, /Manager for routing/);
+  assert.match(html, /1–2 projects/);
+  assert.match(html, /permanent front desk/i);
+  assert.match(html, /temporary extra hands/i);
+  assert.match(html, /Use 3 sub-agents/);
   assert.match(html, /Download starter kit/);
   assert.doesNotMatch(html, /codex-preview|SkeletonPreview|react-loading-skeleton/);
 });
