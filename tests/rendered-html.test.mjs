@@ -21,6 +21,10 @@ test("server-renders the finished playbook", async () => {
   assert.match(html, /permanent front desk/i);
   assert.match(html, /temporary extra hands/i);
   assert.match(html, /Use 3 sub-agents/);
+  assert.match(html, /Spend strong reasoning once/);
+  assert.match(html, /minimize expensive reasoning use/);
+  assert.match(html, /Fast \+ lower cost/);
+  assert.match(html, /Add CSV export to Reports/);
   assert.match(html, /Download starter kit/);
   assert.doesNotMatch(html, /codex-preview|SkeletonPreview|react-loading-skeleton/);
 });
@@ -32,4 +36,6 @@ test("canonical guide and downloadable prompt retain the core contract", async (
     assert.match(guide, new RegExp(phrase, "i"));
     assert.match(prompt, new RegExp(phrase, "i"));
   }
+  assert.match(guide, /most capable reasoning model/i);
+  assert.match(prompt, /minimizes expensive reasoning use/i);
 });

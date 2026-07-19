@@ -52,7 +52,20 @@ For every request, it should:
 6. Inspect the returned evidence.
 7. Archive completed work and preserve unresolved blockers.
 
-Model selection can live in this central policy. The user should not need to choose a model for every request.
+#### Why split the models
+
+Use the most capable reasoning model for the manager. Its job is to understand an ambiguous request, choose the correct project, produce a concrete plan and worker brief, and review the returned evidence. Give bounded execution to faster, lower-cost models that can reliably edit, test, and report against that brief.
+
+The goal is to minimize expensive reasoning use, not to promise fewer total tokens. Clear, non-overlapping scopes avoid paying for the strongest reasoning on every mechanical step. Too many agents, repeated context, or overlapping assignments can increase total usage.
+
+For example, a request such as "Add CSV export to Reports" can become this worker brief:
+
+- **Project:** Reports
+- **Goal:** Export the currently filtered table.
+- **Actions:** Add the button, generate the file, and preserve active filters.
+- **Done when:** Tests pass and the downloaded CSV matches the visible rows.
+
+The manager uses strong reasoning to create and review that brief. A fast execution thread implements it. The user should not need to select a model for every request.
 
 ### 4. Execution
 

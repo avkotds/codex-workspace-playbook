@@ -9,11 +9,13 @@ For every request:
 3. Search recent tasks before creating work. Reuse an active owner when it already owns the same outcome and canonical project.
 4. Route implementation only to canonical projects.
 5. Define the execution contract: Repo, Mode, Target, Done when, Rules, and required runbooks.
-6. Choose the lowest-capability model and reasoning level sufficient for the task, following the current workspace policy rather than asking the user to select every time.
+6. Keep the manager on the workspace's most capable reasoning model so it can plan, route, and review. Delegate each bounded execution task to the fastest, lowest-cost model that can handle it reliably.
 7. Use a separate thread for a durable project outcome.
 8. Use sub-agents only for independent bounded checks or variations. Prevent multiple agents from editing the same files.
 9. Inspect returned evidence. Production work requires live verification, not only build or lint output.
 10. Archive completed execution tasks. Keep unresolved work visible with its exact blocker.
+
+The model split is intentional: concentrate expensive reasoning in the manager, then keep execution lean. Every worker brief should include Repo, Goal, Actions, Rules, and Done when. Clear, non-overlapping briefs reduce expensive reasoning use; extra or overlapping agents can increase total token usage.
 
 When starting, report readiness with:
 

@@ -23,7 +23,8 @@ Teach me how to use the result:
 - Use separate project-scoped threads for durable outcomes.
 - Use sub-agents inside a thread only for independent bounded checks, research lanes, or variations.
 - Avoid multiple agents editing the same files.
-- Let the central manager policy choose the lowest capable model instead of asking me to select one every time.
+- Use the most capable reasoning model for the manager's planning and review. Delegate bounded execution to the fastest, lowest-cost model that can handle it reliably, instead of asking me to select a model every time.
+- Explain that this minimizes expensive reasoning use but may not reduce total tokens when agents repeat or overlap work.
 - Treat tests and builds as evidence; verify the actual output or runtime before reporting completion.
 
 After creating the files, read them back, validate all referenced paths, confirm no secrets were written, and give me one example request I can send to the Workspace Manager.

@@ -4,8 +4,8 @@ import { CopyPrompt } from "./CopyPrompt";
 const architecture = [
   ["01", "Knowledge", "Notion, Obsidian, or Markdown holds durable context."],
   ["02", "Workspace index", "A small map tells Codex which project is canonical."],
-  ["03", "Manager", "Optional once several projects make routing repetitive."],
-  ["04", "Execution", "Threads own tasks; sub-agents parallelize bounded work."],
+  ["03", "Manager", "A strong reasoning model plans, routes, and reviews."],
+  ["04", "Execution", "Fast, lower-cost models handle clear, bounded work."],
 ];
 
 const setupSteps = [
@@ -71,6 +71,24 @@ export default function Home() {
           <article><span className="decision-count">Any workspace size</span><h3>Use sub-agents selectively</h3><p>Spawn them only when one task has two or more independent lanes that can run at the same time.</p></article>
         </div>
 
+        <div className="model-strategy" aria-labelledby="model-strategy-title">
+          <div className="strategy-copy">
+            <p className="role-label">Why split the models?</p>
+            <h3 id="model-strategy-title">Spend strong reasoning once. Keep execution lean.</h3>
+            <p>Give the manager your most capable reasoning model. It turns a fuzzy request into a concrete plan, chooses the right project, writes a clear worker brief, and reviews the evidence. Faster, lower-cost models then handle the bounded execution they can perform reliably.</p>
+            <p className="strategy-guardrail"><strong>The goal is to minimize expensive reasoning use—not promise fewer total tokens.</strong> Clear scopes avoid repetition. Overlapping agents can still increase total usage.</p>
+          </div>
+          <div className="model-lanes" aria-label="Model routing example">
+            <article className="model-lane manager-lane"><span>Strong reasoning</span><h4>Manager</h4><p>Understand → plan → assign → review</p></article>
+            <b aria-hidden="true">→</b>
+            <article className="model-lane worker-lane"><span>Fast + lower cost</span><h4>Worker thread</h4><p>Edit → test → return evidence</p></article>
+          </div>
+          <div className="handoff-example">
+            <div><span>Example request</span><p>“Add CSV export to Reports.”</p></div>
+            <div><span>The manager sends</span><dl><dt>Project</dt><dd>Reports</dd><dt>Goal</dt><dd>Export the currently filtered table.</dd><dt>Actions</dt><dd>Add the button, generate the file, preserve active filters.</dd><dt>Done when</dt><dd>Tests pass and the downloaded CSV matches the visible rows.</dd></dl></div>
+          </div>
+        </div>
+
         <div className="role-grid">
           <article className="role-card manager-card">
             <div className="role-card-heading"><p className="role-label">The manager</p><h3>A permanent front desk</h3></div>
@@ -89,7 +107,7 @@ export default function Home() {
           </article>
         </div>
 
-        <p className="cost-note"><strong>Simple rule:</strong> sub-agents usually save time, not money. Keep their jobs independent and narrow so they do not repeat the same work.</p>
+        <p className="cost-note"><strong>Simple rule:</strong> the manager concentrates expensive reasoning; workers and sub-agents keep execution fast. Parallel agents usually save time, but save compute only when their jobs are independent and narrow.</p>
       </section>
 
       <section className="starter shell" id="starter-kit" aria-labelledby="starter-title">
