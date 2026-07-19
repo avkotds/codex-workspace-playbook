@@ -1,6 +1,6 @@
 # Set up my Codex workspace safely
 
-Help me create a beginner-friendly Codex workspace using the Codex Workspace Playbook.
+Help me create a beginner-friendly Codex workspace using the Codex Workspace Playbook. GitHub remains canonical for project source and the public playbook.
 
 First, inspect the current directory and existing files without changing anything. Then ask me only for information you cannot discover:
 
@@ -20,11 +20,18 @@ Create or adapt:
 
 Teach me how to use the result:
 
-- Use separate project-scoped threads for durable outcomes.
-- Use sub-agents inside a thread only for independent bounded checks, research lanes, or variations.
-- Avoid multiple agents editing the same files.
-- Use the most capable reasoning model for the manager's planning and review. Delegate bounded execution to the fastest, lowest-cost model that can handle it reliably, instead of asking me to select a model every time.
-- Explain that this minimizes expensive reasoning use but may not reduce total tokens when agents repeat or overlap work.
+- One or two projects usually do not need a manager; consider one with three or more active projects or repetitive routing.
+- Use separate project-scoped threads for durable outcomes and sub-agents only for independent bounded work.
+- Read the relevant skill, runbook, or source of truth before routing a workflow.
+- Select the execution interface before the worker model: MCP/app/API → CLI/SDK/SSH → Browser/Chrome → Computer Use.
+- Diagnose structured failures by identity, authentication, permissions, schema, target, and callability; never silently fall back to Browser or Computer Use.
+- Use hybrid execution when helpful: structured mutation followed by UI visual verification.
+- Use the most capable reasoning model for manager planning and review. Delegate bounded execution to the fastest, lowest-cost capable worker.
+- Explain the dated **Current Codex example — July 2026** model table from `workspace-manager.md`, while keeping general capability guidance primary.
+- Workers never use High reasoning; the manager decomposes or reviews instead.
+- Require each worker to return outcome, relevant changes, verification, exact references, and blockers.
+- Keep full logs in the worker and pull targeted evidence into the manager only when needed. Do not add global output or compaction hacks.
+- Explain that this minimizes expensive reasoning use but cannot guarantee lower total token usage.
 - Treat tests and builds as evidence; verify the actual output or runtime before reporting completion.
 
 After creating the files, read them back, validate all referenced paths, confirm no secrets were written, and give me one example request I can send to the Workspace Manager.

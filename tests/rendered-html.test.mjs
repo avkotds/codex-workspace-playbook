@@ -25,6 +25,17 @@ test("server-renders the finished playbook", async () => {
   assert.match(html, /minimize expensive reasoning use/);
   assert.match(html, /Fast \+ lower cost/);
   assert.match(html, /Add CSV export to Reports/);
+  assert.match(html, /How the manager chooses/);
+  assert.match(html, /Interface first\. Model second/);
+  assert.match(html, /MCP\/app\/API/);
+  assert.match(html, /CLI\/SDK\/SSH/);
+  assert.match(html, /Never silently fall back/);
+  assert.match(html, /Notion schema or content/);
+  assert.match(html, /Current Codex example — July 2026/);
+  assert.match(html, /gpt-5\.6-terra/);
+  assert.match(html, /Workers never use High/);
+  assert.match(html, /Manager token discipline/);
+  assert.match(html, /outcome, relevant changes, verification, exact references, and blockers/i);
   assert.match(html, /Download starter kit/);
   assert.doesNotMatch(html, /codex-preview|SkeletonPreview|react-loading-skeleton/);
 });
@@ -38,4 +49,6 @@ test("canonical guide and downloadable prompt retain the core contract", async (
   }
   assert.match(guide, /most capable reasoning model/i);
   assert.match(prompt, /minimizes expensive reasoning use/i);
+  assert.match(guide, /MCP\/app\/API → CLI\/SDK\/SSH → Browser\/Chrome → Computer Use/);
+  assert.match(prompt, /MCP\/app\/API → CLI\/SDK\/SSH → Browser\/Chrome → Computer Use/);
 });

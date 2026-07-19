@@ -1,3 +1,7 @@
+> This page is a complete mirror generated from the GitHub-canonical playbook. Edit the Markdown source in GitHub, then regenerate this body.
+
+[Canonical Markdown](https://github.com/avkotds/codex-workspace-playbook/blob/main/content/playbook.md) · [Manager template](https://github.com/avkotds/codex-workspace-playbook/blob/main/public/downloads/workspace-manager.md) · [Starter kit files](https://github.com/avkotds/codex-workspace-playbook/tree/main/public/downloads)
+
 # Codex Workspace Playbook
 
 ## The idea
@@ -198,3 +202,7 @@ You do not need the complete system on day one.
 5. Add parallel agents only when the work has independent lanes.
 
 The goal is not more process. The goal is to make the right context and the right project obvious, so you can ask for outcomes instead of repeatedly explaining your setup.
+
+---
+
+GitHub is canonical: [codex-workspace-playbook](https://github.com/avkotds/codex-workspace-playbook). Regenerate this full Notion mirror after changing the canonical Markdown.

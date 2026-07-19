@@ -5,6 +5,7 @@ A public, beginner-friendly guide to connecting projects, durable knowledge, a W
 - Read the canonical guide in [`content/playbook.md`](content/playbook.md).
 - Use the safe onboarding prompt in [`public/downloads/setup-prompt.md`](public/downloads/setup-prompt.md).
 - Download or edit the starter templates in [`public/downloads`](public/downloads).
+- Generate the full Notion-ready mirror in [`generated/notion-playbook.md`](generated/notion-playbook.md).
 - Visit the live guide after publishing through OpenAI Sites.
 
 The case study is sanitized. It preserves the architecture and removes private paths, project names, task IDs, client information, credentials, and private links.
@@ -15,9 +16,12 @@ The site uses the OpenAI Sites vinext starter. Use the existing lockfile and Nod
 
 ```bash
 npm ci
+npm run generate
 npm run dev
 npm test
 ```
+
+GitHub remains canonical. `npm run generate:notion` creates a complete Notion-ready mirror from `content/playbook.md`, with wrapper links and a GitHub-canonical footer. `npm run generate:starter` reproducibly rebuilds the starter ZIP from the downloadable Markdown files.
 
 ## License
 

@@ -17,6 +17,21 @@ const setupSteps = [
   ["Verify the outcome", "Builds are evidence, not completion. Check the real page, endpoint, file, or runtime."],
 ];
 
+const managerChoices = [
+  ["01", "Read the workflow", "Start with the relevant skill, runbook, or source of truth. It explains how the workflow operates."],
+  ["02", "Select the interface", "Choose the strongest reliable execution route before choosing a model."],
+  ["03", "Select the worker", "Match model and reasoning to ambiguity, consequence, and work shape."],
+  ["04", "Send a bounded contract", "Define the outcome, scope, rules, done criteria, and expected return."],
+  ["05", "Review and verify", "Inspect targeted evidence, then check the real artifact or runtime."],
+];
+
+const modelExample = [
+  ["Manager", "gpt-5.6-sol", "High"],
+  ["Basic bounded worker", "gpt-5.6-terra", "Medium"],
+  ["Ordinary worker", "gpt-5.6-sol", "Low"],
+  ["Complex worker", "gpt-5.6-sol", "Medium"],
+];
+
 const managerPrompt = `Create a pinned Workspace Manager for this workspace. Read the root instructions and project index first. For each request, choose the right project, reuse an existing thread when possible, and verify the result before calling it done.`;
 
 const subAgentPrompt = `Use 3 sub-agents for this review: one to check the mobile layout, one to check accessibility, and one to review the copy. Keep them read-only, then combine their findings into one prioritized list.`;
@@ -39,7 +54,7 @@ export default function Home() {
           <h1>Turn one folder into a working AI team.</h1>
           <p className="lede">Connect your projects, notes, and instructions once. Start with one project thread. Add a manager when your workspace grows, and use sub-agents when one task can split into independent parts.</p>
           <div className="hero-actions"><CopySetupPrompt /><a className="button secondary" href="/downloads/codex-workspace-starter.zip" download>Download starter kit</a></div>
-          <p className="microcopy">No account, installer, or specific note-taking app required.</p>
+          <p className="microcopy">GitHub is canonical. No account, installer, or specific note-taking app required.</p>
         </div>
         <aside className="case-card" aria-label="Case study summary">
           <p className="case-number">CASE STUDY / 01</p><h2>Artem&apos;s pattern, sanitized</h2>
@@ -71,11 +86,40 @@ export default function Home() {
           <article><span className="decision-count">Any workspace size</span><h3>Use sub-agents selectively</h3><p>Spawn them only when one task has two or more independent lanes that can run at the same time.</p></article>
         </div>
 
+        <div className="manager-choice" aria-labelledby="manager-choice-title">
+          <div className="choice-intro">
+            <p className="role-label">How the manager chooses</p>
+            <h3 id="manager-choice-title">Interface first. Model second.</h3>
+            <p>A skill or runbook explains how a workflow operates. The manager reads it, chooses the most reliable way to act, then assigns a capable worker.</p>
+          </div>
+          <ol className="choice-steps">
+            {managerChoices.map(([number, title, copy]) => <li key={number}><span>{number}</span><div><h4>{title}</h4><p>{copy}</p></div></li>)}
+          </ol>
+          <div className="reliability-ladder" aria-label="Execution interface reliability ladder">
+            <p>Reliability ladder</p><strong>MCP/app/API <b>→</b> CLI/SDK/SSH <b>→</b> Browser/Chrome <b>→</b> Computer Use</strong>
+          </div>
+          <div className="interface-grid">
+            <article><h4>MCP / app / API</h4><p>Structured actions with explicit inputs and outputs.</p></article>
+            <article><h4>CLI / SDK / script / SSH</h4><p>Authoritative command workflows for a project or system.</p></article>
+            <article><h4>Browser / Chrome</h4><p>Authenticated sessions, DOM, and rendered-web work.</p></article>
+            <article><h4>Computer Use</h4><p>Genuinely visual desktop work with no reliable structured route.</p></article>
+          </div>
+          <div className="failure-rule">
+            <strong>Never silently fall back.</strong>
+            <p>If a structured call fails, diagnose identity, authentication, permissions, schema, target, and callability. Hybrid execution is welcome: make the mutation through API or CLI, then use the UI for visual verification.</p>
+          </div>
+          <div className="example-grid" aria-label="Beginner routing examples">
+            <article><span>Notion schema or content</span><strong>Notion MCP</strong></article>
+            <article><span>Web app mutation</span><strong>API/CLI + Browser verification</strong></article>
+            <article><span>Windows GUI, no structured interface</span><strong>Computer Use</strong></article>
+          </div>
+        </div>
+
         <div className="model-strategy" aria-labelledby="model-strategy-title">
           <div className="strategy-copy">
             <p className="role-label">Why split the models?</p>
             <h3 id="model-strategy-title">Spend strong reasoning once. Keep execution lean.</h3>
-            <p>Give the manager your most capable reasoning model. It turns a fuzzy request into a concrete plan, chooses the right project, writes a clear worker brief, and reviews the evidence. Faster, lower-cost models then handle the bounded execution they can perform reliably.</p>
+            <p>Give the manager your most capable reasoning model. It turns a fuzzy request into a concrete plan, chooses the right project, writes a clear worker brief, and reviews the evidence. Faster, lower-cost models then handle bounded execution they can perform reliably.</p>
             <p className="strategy-guardrail"><strong>The goal is to minimize expensive reasoning use—not promise fewer total tokens.</strong> Clear scopes avoid repetition. Overlapping agents can still increase total usage.</p>
           </div>
           <div className="model-lanes" aria-label="Model routing example">
@@ -86,6 +130,15 @@ export default function Home() {
           <div className="handoff-example">
             <div><span>Example request</span><p>“Add CSV export to Reports.”</p></div>
             <div><span>The manager sends</span><dl><dt>Project</dt><dd>Reports</dd><dt>Goal</dt><dd>Export the currently filtered table.</dd><dt>Actions</dt><dd>Add the button, generate the file, preserve active filters.</dd><dt>Done when</dt><dd>Tests pass and the downloaded CSV matches the visible rows.</dd></dl></div>
+          </div>
+          <div className="current-models">
+            <div><span>Current Codex example — July 2026</span><p>General capability guidance comes first; these model IDs are a dated example.</p></div>
+            <table><thead><tr><th>Role</th><th>Model</th><th>Reasoning</th></tr></thead><tbody>{modelExample.map(([role, model, reasoning]) => <tr key={role}><td>{role}</td><td><code>{model}</code></td><td>{reasoning}</td></tr>)}</tbody></table>
+            <p><strong>Workers never use High.</strong> The manager decomposes work or reviews the difficult evidence instead.</p>
+          </div>
+          <div className="token-discipline">
+            <span>Manager token discipline</span>
+            <p>Require concise worker returns: outcome, relevant changes, verification, exact references, and blockers. Keep full logs in the worker; ask for targeted diffs, test results, filtered excerpts, or live references. Inspect raw evidence only when needed—without global output limits or compaction hacks.</p>
           </div>
         </div>
 

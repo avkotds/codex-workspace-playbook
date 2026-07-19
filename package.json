@@ -9,7 +9,10 @@
     "dev": "vinext dev",
     "build": "vinext build",
     "start": "vinext start",
-    "test": "npm run build && node --test tests/rendered-html.test.mjs tests/content-safety.test.mjs",
+    "generate": "npm run generate:notion && npm run generate:starter",
+    "generate:notion": "node scripts/generate-notion-body.mjs",
+    "generate:starter": "node scripts/generate-starter-zip.mjs",
+    "test": "npm run generate && npm run build && node --test tests/*.test.mjs",
     "lint": "eslint . --ignore-pattern dist --ignore-pattern .next",
     "db:generate": "drizzle-kit generate"
   },
